@@ -11,6 +11,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -23,6 +24,8 @@ import org.apache.http.util.EntityUtils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nfbsoftware.edgate.model.Concept;
+import com.nfbsoftware.edgate.model.ConceptStandards;
 import com.nfbsoftware.edgate.model.Profile;
 import com.nfbsoftware.edgate.model.StandardsSet;
 
@@ -82,9 +85,9 @@ public class EdGateClient
         // Add the hash header
         getRequest.setHeader("X-Hash", parameterHash);
         
-        // Get our response from the SALT server
-        HttpResponse saltyResponse = httpClient.execute(target, getRequest);
-        HttpEntity entity = saltyResponse.getEntity();
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
         
         // If we have an entity, convert it to Java objects
         if(entity != null) 
@@ -126,9 +129,9 @@ public class EdGateClient
         // Add the hash header
         getRequest.setHeader("X-Hash", parameterHash);
         
-        // Get our response from the SALT server
-        HttpResponse saltyResponse = httpClient.execute(target, getRequest);
-        HttpEntity entity = saltyResponse.getEntity();
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
         
         // If we have an entity, convert it to Java objects
         if(entity != null) 
@@ -171,9 +174,9 @@ public class EdGateClient
         // Add the hash header
         getRequest.setHeader("X-Hash", parameterHash);
         
-        // Get our response from the SALT server
-        HttpResponse saltyResponse = httpClient.execute(target, getRequest);
-        HttpEntity entity = saltyResponse.getEntity();
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
         
         // If we have an entity, convert it to Java objects
         if(entity != null) 
@@ -186,6 +189,148 @@ public class EdGateClient
         }
         
         return standardsSetList;
+    }
+    
+    /**
+     * <p>Returns the top level of concept taxonomy</p>
+     * 
+     * @return List - A set of Concept objects
+     * @throws Exception - catch all for exceptions
+     */
+    public List<Concept> getConcepts() throws Exception
+    {
+    	List<Concept> conceptList = new ArrayList<Concept>();
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	//parameterMap.put("q", "");
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/concepts/browse?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            conceptList = mapper.readValue(responseString, new TypeReference<List<Concept>>(){});
+        }
+        
+        return conceptList;
+    }
+    
+    /**
+     * <p>Returns the top level of concept taxonomy</p>
+     * 
+     * @param id The GUID that identifies the concept that is to be read from the service provider. 
+     * @return List - A set of Concept objects
+     * @throws Exception - catch all for exceptions
+     */
+    public Concept getConcept(String guid) throws Exception
+    {
+    	Concept conceptObj = null;
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	//parameterMap.put("q", "");
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/concepts/" + guid + "?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            conceptObj = mapper.readValue(responseString,  Concept.class);
+        }
+        
+        return conceptObj;
+    }
+    
+    /**
+     * <p>get standards tagged with concept GUID</p>
+     * 
+     * @param id The GUID that identifies the concept that is to be read from the service provider. 
+     * @return List - A set of Concept objects
+     * @throws Exception - catch all for exceptions
+     */
+    public ConceptStandards getConceptStandards(String guid, String setId, String gradeLevel) throws Exception
+    {
+    	ConceptStandards conceptStandardsObj = null;
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	parameterMap.put("set", setId);
+    	
+    	if(StringUtils.isNotBlank(gradeLevel))
+    	{
+    		parameterMap.put("grade", gradeLevel);
+    	}
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/concepts/standards/" + guid + "?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            if(responseString.length() > 2)
+            {
+	            ObjectMapper mapper = new ObjectMapper();
+	            conceptStandardsObj = mapper.readValue(responseString,  ConceptStandards.class);
+            }
+        }
+        
+        return conceptStandardsObj;
     }
     
     /**

@@ -2,7 +2,10 @@ package com.nfbsoftware.edgate;
 
 import java.util.List;
 
+import com.nfbsoftware.edgate.model.Concept;
+import com.nfbsoftware.edgate.model.ConceptStandards;
 import com.nfbsoftware.edgate.model.Profile;
+import com.nfbsoftware.edgate.model.Standard;
 import com.nfbsoftware.edgate.model.StandardsSet;
 
 import junit.framework.Test;
@@ -16,8 +19,8 @@ import junit.framework.TestSuite;
  */
 public class EdGateClientTest extends TestCase
 {
-    private String PUBLIC_KEY = "public-key-here"; 
-    private String PRIVATE_KEY = "private-key-here"; 
+    private String PUBLIC_KEY = "client-public-key"; 
+    private String PRIVATE_KEY = "client-private-key"; 
     
     /**
      * Create the test case
@@ -155,5 +158,138 @@ public class EdGateClientTest extends TestCase
         }
         
         System.out.println("====> Finished EdGateClientTest.testStandard");
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testConcepts() throws Exception
+    {
+        System.out.println("====> Starting EdGateClientTest.testConcepts");
+        
+        try
+        {
+        	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+            
+        	List<Concept> conceptList = client.getConcepts();
+        	
+        	if(conceptList != null)
+        	{
+        		int counter = 0;
+        		
+        		for(Concept tmpConcept : conceptList)
+        		{
+        			System.out.println("guid (" + counter + "): " + tmpConcept.getGuid());
+        			System.out.println("name (" + counter + "): " + tmpConcept.getName());
+        			
+        			if(tmpConcept.getChildren() != null)
+        			{
+	        			int childCount = 0;
+	        			for(String childGuid : tmpConcept.getChildren())
+	        			{
+	        				System.out.println("children (" + counter + ") child " + childCount + ": " + childGuid);
+	        				
+	        				childCount++;
+	        			}
+        			}
+        			
+        			counter++;
+        		}
+        	}
+            
+            assertTrue(conceptList != null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            
+            assertTrue(true);
+        }
+        
+        System.out.println("====> Finished EdGateClientTest.testConcepts");
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testConcept() throws Exception
+    {
+        System.out.println("====> Starting EdGateClientTest.testConcept");
+        
+        try
+        {
+        	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+            
+        	Concept conceptObj = client.getConcept("f06fdee2-b6c3-4174-acf0-03b58393b68c");
+        	
+        	if(conceptObj != null)
+        	{
+    			System.out.println("guid: " + conceptObj.getGuid());
+    			System.out.println("name: " + conceptObj.getName());
+    			
+    			if(conceptObj.getChildren() != null)
+    			{
+	    			int childCount = 0;
+	    			for(String childGuid : conceptObj.getChildren())
+	    			{
+	    				System.out.println("child " + childCount + ": " + childGuid);
+	    				
+	    				childCount++;
+	    			}
+    			}
+        	}
+            
+            assertTrue(conceptObj != null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            
+            assertTrue(true);
+        }
+        
+        System.out.println("====> Finished EdGateClientTest.testConcept");
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testConceptStandards() throws Exception
+    {
+        System.out.println("====> Starting EdGateClientTest.testConceptStandards");
+        
+        try
+        {
+        	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+            
+        	ConceptStandards conceptStandardsObj = client.getConceptStandards("f06fdee2-b6c3-4174-acf0-03b58393b68c", "TX", null);
+        	
+        	if(conceptStandardsObj != null)
+        	{
+    			if(conceptStandardsObj.getStandards() != null)
+    			{
+	    			int childCount = 0;
+	    			for(Standard tmpStandard : conceptStandardsObj.getStandards())
+	    			{
+	    				System.out.println("child " + childCount + ": " + tmpStandard.getGuid());
+	    				
+	    				childCount++;
+	    			}
+    			}
+        	}
+            
+            assertTrue(conceptStandardsObj != null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            
+            assertTrue(true);
+        }
+        
+        System.out.println("====> Finished EdGateClientTest.testConceptStandards");
     }
 }
