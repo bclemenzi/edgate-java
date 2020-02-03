@@ -45,7 +45,7 @@ Below you will find a number of basic examples to guide you through the use of t
 String myPublicKey = "example";
 String myPrivateKey = "6a3c8fb1062285ee69d111ca77e6f72957e55dfa0e3ac277a5a5ef82c7ba6208";
 
-// Init our client object with the host information
+// Init our client object with the account keys
 EdGateClient client = new EdGateClient(myPublicKey, myPrivateKey);
 ```
 
@@ -68,7 +68,7 @@ for(StandardsSet tmpStandardsSet : profileValue.getStandardsSets())
 }
 ```
 
-**Returns information about all standards sets from the system that the user has access to**
+**Return information about all standards sets the user has access to**
 
 ```java	
 // Get the list of standard sets for the account
