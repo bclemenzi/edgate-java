@@ -63,8 +63,8 @@ Profile profileValue = client.getProfile();
 for(StandardsSet tmpStandardsSet : profileValue.getStandardsSets())
 {
 	System.out.println("id: " + tmpStandardsSet.getSetId());
-    System.out.println("name: " + tmpStandardsSet.getName());
-    System.out.println("parent: " + tmpStandardsSet.getParent());
+	System.out.println("name: " + tmpStandardsSet.getName());
+	System.out.println("parent: " + tmpStandardsSet.getParent());
 }
 ```
 
@@ -78,7 +78,7 @@ List<StandardsSet> standardsSetList = client.getStandards();
 for(StandardsSet tmpStandardsSet : standardsSetList)
 {
 	System.out.println("id: " + tmpStandardsSet.getSetId());
-    System.out.println("name: " + tmpStandardsSet.getName());
-    System.out.println("parent: " + tmpStandardsSet.getParent());
+	System.out.println("name: " + tmpStandardsSet.getName());
+	System.out.println("parent: " + tmpStandardsSet.getParent());
 }
 ```
