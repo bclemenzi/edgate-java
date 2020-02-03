@@ -47,6 +47,7 @@ String myPrivateKey = "6a3c8fb1062285ee69d111ca77e6f72957e55dfa0e3ac277a5a5ef82c
 
 // Init our client object with the host information
 EdGateClient client = new EdGateClient(myPublicKey, myPrivateKey);
+```
 
 Library Functions
 -----
