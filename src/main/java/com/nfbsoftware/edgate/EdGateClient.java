@@ -374,7 +374,7 @@ public class EdGateClient
     /**
      * <p>Returns the top level of concept taxonomy</p>
      * 
-     * @param id The GUID that identifies the concept that is to be read from the service provider. 
+     * @param guid - GUID of concept
      * @return List - A set of Concept objects
      * @throws Exception - catch all for exceptions
      */
@@ -419,7 +419,9 @@ public class EdGateClient
     /**
      * <p>get standards tagged with concept GUID</p>
      * 
-     * @param id The GUID that identifies the concept that is to be read from the service provider. 
+     * @param guid - GUID of concept to get standards for
+     * @param setId - ID of standards set to fetch
+     * @param gradeLevel - Grade level of standards to retrieve
      * @return List - A set of Concept objects
      * @throws Exception - catch all for exceptions
      */
