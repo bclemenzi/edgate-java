@@ -24,7 +24,7 @@ The easiest way to incorporate the library into your Java project is to use Mave
 <dependency>
    <groupId>com.nfbsoftware</groupId>
    <artifactId>edgate-java</artifactId>
-   <version>1.0.0</version>
+   <version>1.0.2</version>
 </dependency>
 ```
 
@@ -71,14 +71,89 @@ for(StandardsSet tmpStandardsSet : profileValue.getStandardsSets())
 **Return information about all standards sets the user has access to**
 
 ```java	
-// Get the list of standard sets for the account
-List<StandardsSet> standardsSetList = client.getStandards();
+// Get the list of root standards for a StandardsSet
+List<Standard> standardList = client.getStandardsRoot("FL");
 
-// Loop through the returned Authorities
-for(StandardsSet tmpStandardsSet : standardsSetList)
+if(standardList != null)
 {
-	System.out.println("id: " + tmpStandardsSet.getSetId());
-	System.out.println("name: " + tmpStandardsSet.getName());
-	System.out.println("parent: " + tmpStandardsSet.getParent());
+	int counter = 0;
+	
+	// Loop through the returned Authorities
+	for(Standard tmpStandard : standardList)
+	{
+		System.out.println("GUID (" + counter + "): " + tmpStandard.getGuid());
+		System.out.println("Set (" + counter + "): " + tmpStandard.getSet());
+		System.out.println("StandardText (" + counter + "): " + tmpStandard.getStandardText());
+		System.out.println("StandardNumber (" + counter + "): " + tmpStandard.getStandardNumber());
+		System.out.println("Parent (" + counter + "): " + tmpStandard.getParent());
+		System.out.println("");
+		
+		counter++;
+	}
+}
+```
+
+**Return a standard based on a GUID**
+
+```java	
+// FL - American History - FL.SS.4.A
+Standard tmpStandard = client.getStandard("ff719539-3b0b-47e9-8a10-31a03cb066f1");
+
+if(tmpStandard != null)
+{
+	System.out.println("GUID: " + tmpStandard.getGuid());
+	System.out.println("Set: " + tmpStandard.getSet());
+	System.out.println("StandardText: " + tmpStandard.getStandardText());
+	System.out.println("StandardNumber: " + tmpStandard.getStandardNumber());
+	System.out.println("Parent: " + tmpStandard.getParent());
+	System.out.println("");
+}
+```
+
+**Return a list of ROOT standards of a Standard based on a GUID**
+
+```java	
+// FLorida Standard Set
+List<Standard> standardList = client.getStandardsRoot("FL");
+
+if(standardList != null)
+{
+	int counter = 0;
+	
+	for(Standard tmpStandard : standardList)
+	{
+		System.out.println("GUID (" + counter + "): " + tmpStandard.getGuid());
+		System.out.println("Set (" + counter + "): " + tmpStandard.getSet());
+		System.out.println("StandardText (" + counter + "): " + tmpStandard.getStandardText());
+		System.out.println("StandardNumber (" + counter + "): " + tmpStandard.getStandardNumber());
+		System.out.println("Parent (" + counter + "): " + tmpStandard.getParent());
+		System.out.println("");
+		
+		counter++;
+	}
+}
+```
+
+**Return a list of child standard objects for a given standard GUID**
+
+```java	
+// FL - American History - FL.SS.4.A
+List<Standard> standardList = client.getStandardsChildren("ff719539-3b0b-47e9-8a10-31a03cb066f1");
+
+if(standardList != null)
+{
+	int counter = 0;
+	
+	for(Standard tmpStandard : standardList)
+	{
+		System.out.println("GUID (" + counter + "): " + tmpStandard.getGuid());
+		System.out.println("Set (" + counter + "): " + tmpStandard.getSet());
+		System.out.println("StandardText (" + counter + "): " + tmpStandard.getStandardText());
+		System.out.println("StandardNumber (" + counter + "): " + tmpStandard.getStandardNumber());
+		System.out.println("Parent (" + counter + "): " + tmpStandard.getParent());
+		System.out.println("");
+		
+		counter++;
+	}
 }
 ```

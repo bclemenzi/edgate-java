@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nfbsoftware.edgate.model.Concept;
 import com.nfbsoftware.edgate.model.ConceptStandards;
 import com.nfbsoftware.edgate.model.Profile;
+import com.nfbsoftware.edgate.model.Standard;
 import com.nfbsoftware.edgate.model.StandardsSet;
 
 /**
@@ -108,7 +109,7 @@ public class EdGateClient
      * @return List - A set of StandardsSet objects
      * @throws Exception - catch all for exceptions
      */
-    public List<StandardsSet> getStandards() throws Exception
+    public List<StandardsSet> getStandardSets() throws Exception
     {
     	List<StandardsSet> standardsSetList = new ArrayList<StandardsSet>();
     	
@@ -147,15 +148,15 @@ public class EdGateClient
     }
     
     /**
-     * <p>Returns a standard based on a GUID</p>
+     * <p>Returns a list of top level standards for a given standards set</p>
      * 
-     * @param id The GUID that identifies the standard that is to be read from the service provider.
-     * @return List - A set of StandardsSet objects
+     * @param setId - abbreviation of standards set
+     * @return List of Standard objects for a parent standard
      * @throws Exception - catch all for exceptions
      */
-    public List<StandardsSet> getStandard(String id) throws Exception
+    public List<Standard> getStandardsRoot(String setId) throws Exception
     {
-    	List<StandardsSet> standardsSetList = new ArrayList<StandardsSet>();
+    	List<Standard> standardsList = new ArrayList<Standard>();
     	
     	HashMap<String, String> parameterMap = new HashMap<String, String>();
     	//parameterMap.put("param1", "value1");
@@ -169,7 +170,7 @@ public class EdGateClient
         HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
         
         // specify the get request
-        HttpGet getRequest = new HttpGet("/standards/" + id + "/children?" + parameterString);
+        HttpGet getRequest = new HttpGet("/standards/root/" + setId + "?" + parameterString);
         
         // Add the hash header
         getRequest.setHeader("X-Hash", parameterHash);
@@ -185,10 +186,145 @@ public class EdGateClient
             System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
-            standardsSetList = mapper.readValue(responseString, new TypeReference<List<StandardsSet>>(){});
+            standardsList = mapper.readValue(responseString, new TypeReference<List<Standard>>(){});
         }
         
-        return standardsSetList;
+        return standardsList;
+    }
+    
+    /**
+     * <p>Returns a standard based on a GUID</p>
+     * 
+     * @param guid The GUID that identifies the standard that is to be read from the service provider.
+     * @return Standard - A single Standard
+     * @throws Exception - catch all for exceptions
+     */
+    public Standard getStandard(String guid) throws Exception
+    {
+    	Standard standardObject = null;
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	//parameterMap.put("param1", "value1");
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/standards/" + guid + "?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            standardObject = mapper.readValue(responseString, new TypeReference<Standard>(){});
+        }
+        
+        return standardObject;
+    }
+    
+    /**
+     * <p>Returns a list of child standard objects for a given standard GUID</p>
+     * 
+     * @param guid GUID of standard to fetch
+     * @return List of Standard objects for a parent standard
+     * @throws Exception - catch all for exceptions
+     */
+    public List<Standard> getStandardsChildren(String guid) throws Exception
+    {
+    	List<Standard> standardsList = new ArrayList<Standard>();
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	//parameterMap.put("param1", "value1");
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/standards/" + guid + "/children?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            standardsList = mapper.readValue(responseString, new TypeReference<List<Standard>>(){});
+        }
+        
+        return standardsList;
+    }
+    
+    /**
+     * <p>Get a list concepts tagged to a standard</p>
+     * 
+     * @param guid GUID of standard to lookup concepts for
+     * @return List of Concept objects for a standard
+     * @throws Exception - catch all for exceptions
+     */
+    public List<Concept> getStandardsConcepts(String guid) throws Exception
+    {
+    	List<Concept> conceptList = new ArrayList<Concept>();
+    	
+    	HashMap<String, String> parameterMap = new HashMap<String, String>();
+    	//parameterMap.put("param1", "value1");
+    	
+    	String parameterString = createParameterString(parameterMap);
+    	String parameterHash = getSignatureHash(parameterString);
+    	
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        
+        // specify the host, protocol, and port
+        HttpHost target = new HttpHost(HOST_DOMAIN, HOST_PORT, HOST_SCHEME);
+        
+        // specify the get request
+        HttpGet getRequest = new HttpGet("/standards/concepts/" + guid + "?" + parameterString);
+        
+        // Add the hash header
+        getRequest.setHeader("X-Hash", parameterHash);
+        
+        // Get our response from the EdGate server
+        HttpResponse apiResponse = httpClient.execute(target, getRequest);
+        HttpEntity entity = apiResponse.getEntity();
+        
+        // If we have an entity, convert it to Java objects
+        if(entity != null) 
+        {
+            String responseString = EntityUtils.toString(entity);  
+            System.out.println(responseString);
+            
+            ObjectMapper mapper = new ObjectMapper();
+            conceptList = mapper.readValue(responseString, new TypeReference<List<Concept>>(){});
+        }
+        
+        return conceptList;
     }
     
     /**

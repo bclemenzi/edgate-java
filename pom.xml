@@ -4,7 +4,7 @@
 
   	<groupId>com.nfbsoftware</groupId>
   	<artifactId>edgate-java</artifactId>
-  	<version>1.0.1</version>
+  	<version>1.0.2</version>
   	<packaging>jar</packaging>
 
   	<name>EDGate Java Library</name>
@@ -161,12 +161,12 @@
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-annotations</artifactId>
-		    <version>2.9.9</version>
+		    <version>2.10.3</version>
 		</dependency>
 		<dependency>
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
-		    <version>2.9.10.1</version>
+		    <version>2.10.3</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.apache.httpcomponents</groupId>
