@@ -24,7 +24,7 @@ The easiest way to incorporate the library into your Java project is to use Mave
 <dependency>
    <groupId>com.nfbsoftware</groupId>
    <artifactId>edgate-java</artifactId>
-   <version>1.0.2</version>
+   <version>1.0.3</version>
 </dependency>
 ```
 

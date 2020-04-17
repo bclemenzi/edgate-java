@@ -80,6 +80,46 @@ public class EdGateClientTest extends TestCase
         System.out.println("====> Finished EdGateClientTest.testProfile");
     }
     
+    /* 
+    * @throws Exception
+    */
+   public void testAvailableStandards() throws Exception
+   {
+       System.out.println("====> Starting EdGateClientTest.testAvailableStandards");
+       
+       try
+       {
+       		EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+           
+       		List<Standard> standardsList = client.getAvailableStandards();
+       	
+	       	if(standardsList != null)
+	       	{
+	       		int counter = 0;
+	       		
+	       		for(Standard tmpStandard : standardsList)
+	       		{
+	       			System.out.println("guid (" + counter + "): " + tmpStandard.getGuid());
+	       			System.out.println("number (" + counter + "): " + tmpStandard.getStandardNumber());
+	       			System.out.println("text (" + counter + "): " + tmpStandard.getStandardText());
+	       			System.out.println("parent (" + counter + "): " + tmpStandard.getParent());
+	       			
+	       			counter++;
+	       		}
+	       	}
+           
+           assertTrue(standardsList != null);
+       }
+       catch (Exception e)
+       {
+           e.printStackTrace();
+           
+           assertTrue(true);
+       }
+       
+       System.out.println("====> Finished EdGateClientTest.testAvailableStandards");
+   }
+    
     /**
      * 
      * @throws Exception

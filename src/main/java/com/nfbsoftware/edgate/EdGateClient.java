@@ -104,6 +104,31 @@ public class EdGateClient
     }
     
     /**
+     * <p>Returns a list of the standards available to the account profile.</p>
+     * 
+     * @return List - A set of Standard objects
+     * @throws Exception - catch all for exceptions
+     */
+    public List<Standard> getAvailableStandards() throws Exception
+    {
+    	List<Standard> standardsList = new ArrayList<Standard>();
+    	
+    	Profile tmpProfile = getProfile();
+    	
+    	for(StandardsSet tmpStandardsSet : tmpProfile.getStandardsSets())
+    	{
+    		List<Standard> rootStandardsList = getStandardsRoot(tmpStandardsSet.getSetId());
+    		
+    		for(Standard rootStandard : rootStandardsList)
+    		{
+    			standardsList.add(rootStandard);
+    		}
+    	}
+    	
+    	return standardsList;
+    }
+    
+    /**
      * <p>Returns information about all standards sets from the system that the user has access to</p>
      * 
      * @return List - A set of StandardsSet objects
