@@ -164,6 +164,39 @@ public class EdGateClientTest extends TestCase
      * 
      * @throws Exception
      */
+    public void testStandardSet() throws Exception
+    {
+        System.out.println("====> Starting EdGateClientTest.testStandardSet");
+        
+        try
+        {
+        	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+            
+        	StandardsSet standardsSet = client.getStandardSet("FL");
+        	
+        	if(standardsSet != null)
+        	{
+        		System.out.println("id: " + standardsSet.getSetId());
+    			System.out.println("name: " + standardsSet.getName());
+    			System.out.println("parent: " + standardsSet.getSetId());
+        	}
+            
+            assertTrue(standardsSet != null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            
+            assertTrue(true);
+        }
+        
+        System.out.println("====> Finished EdGateClientTest.testStandardSet");
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
     public void testStandardsRoot() throws Exception
     {
         System.out.println("====> Starting EdGateClientTest.testStandardsRoot");

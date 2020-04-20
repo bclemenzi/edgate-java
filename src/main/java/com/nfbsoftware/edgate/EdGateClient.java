@@ -173,6 +173,31 @@ public class EdGateClient
     }
     
     /**
+     * <p>Returns the StandardSet object for the given ID</p>
+     * 
+     * @param setId - The ID of the given StandardsSet
+     * @return StandardsSet - A StandardsSet object
+     * @throws Exception - catch all for exceptions
+     */
+    public StandardsSet getStandardSet(String setId) throws Exception
+    {
+    	StandardsSet standardsSet = null;
+    	
+    	List<StandardsSet> tmpStandardsSetList = getStandardSets();
+    	
+    	for(StandardsSet tmpStandardsSet : tmpStandardsSetList)
+    	{
+    		if(tmpStandardsSet.getSetId().equalsIgnoreCase(setId))
+    		{
+    			standardsSet = tmpStandardsSet;
+    			break;
+    		}
+    	}
+    	
+    	return standardsSet;
+    }
+    
+    /**
      * <p>Returns a list of top level standards for a given standards set</p>
      * 
      * @param setId - abbreviation of standards set
