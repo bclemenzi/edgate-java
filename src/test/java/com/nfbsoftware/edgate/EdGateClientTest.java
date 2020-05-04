@@ -249,7 +249,8 @@ public class EdGateClientTest extends TestCase
         	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
             
         	// FL - American History - FL.SS.4.A
-        	Standard tmpStandard = client.getStandard("ff719539-3b0b-47e9-8a10-31a03cb066f1");
+        	//Standard tmpStandard = client.getStandard("ff719539-3b0b-47e9-8a10-31a03cb066f1");
+        	Standard tmpStandard = client.getStandard("6394bd67-f772-43b4-8dfa-1f3674a998f4");
         	
         	if(tmpStandard != null)
         	{
@@ -259,6 +260,14 @@ public class EdGateClientTest extends TestCase
     			System.out.println("StandardNumber: " + tmpStandard.getStandardNumber());
     			System.out.println("Parent: " + tmpStandard.getParent());
     			System.out.println("");
+    			
+    			int childCount = 0;
+    			for(String childId : tmpStandard.getChildren())
+    			{
+    				System.out.println("Child " + childCount + ": " + childId);
+    				
+    				childCount++;
+    			}
         	}
             
             assertTrue(tmpStandard != null);
@@ -315,6 +324,50 @@ public class EdGateClientTest extends TestCase
         }
         
         System.out.println("====> Finished EdGateClientTest.testStandardsChildren");
+    }
+    
+    /**
+     * 
+     * @throws Exception
+     */
+    public void testRelatedStandards() throws Exception
+    {
+        System.out.println("====> Starting EdGateClientTest.testRelatedStandards");
+        
+        try
+        {
+        	EdGateClient client = new EdGateClient(PUBLIC_KEY, PRIVATE_KEY);
+            
+        	// FL - American History - FL.SS.4.A
+        	List<Standard> standardList = client.getRelatedStandards("ff719539-3b0b-47e9-8a10-31a03cb066f1", "TX");
+        	
+        	if(standardList != null)
+        	{
+        		int counter = 0;
+        		
+        		for(Standard tmpStandard : standardList)
+        		{
+        			System.out.println("GUID (" + counter + "): " + tmpStandard.getGuid());
+        			System.out.println("Set (" + counter + "): " + tmpStandard.getSet());
+        			System.out.println("StandardText (" + counter + "): " + tmpStandard.getStandardText());
+        			System.out.println("StandardNumber (" + counter + "): " + tmpStandard.getStandardNumber());
+        			System.out.println("Parent (" + counter + "): " + tmpStandard.getParent());
+        			System.out.println("");
+        			
+        			counter++;
+        		}
+        	}
+            
+            assertTrue(standardList != null);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            
+            assertTrue(true);
+        }
+        
+        System.out.println("====> Finished EdGateClientTest.testRelatedStandards");
     }
     
     /**
