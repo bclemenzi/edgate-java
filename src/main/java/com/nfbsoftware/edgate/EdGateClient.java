@@ -94,7 +94,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity); 
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             profileValue = mapper.readValue(responseString,  Profile.class);
@@ -126,6 +126,31 @@ public class EdGateClient
     	}
     	
     	return standardsList;
+    }
+    
+    /**
+     * <p>Returns a list of the standards guids available to the account profile.</p>
+     * 
+     * @return List - A set of String objects
+     * @throws Exception - catch all for exceptions
+     */
+    public List<String> getAvailableStandardsGuids() throws Exception
+    {
+    	List<String> standardsGuidList = new ArrayList<String>();
+    	
+    	Profile tmpProfile = getProfile();
+    	
+    	for(StandardsSet tmpStandardsSet : tmpProfile.getStandardsSets())
+    	{
+    		List<Standard> rootStandardsList = getStandardsRoot(tmpStandardsSet.getSetId());
+    		
+    		for(Standard rootStandard : rootStandardsList)
+    		{
+    			standardsGuidList.add(rootStandard.getGuid());
+    		}
+    	}
+    	
+    	return standardsGuidList;
     }
     
     /**
@@ -163,7 +188,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             standardsSetList = mapper.readValue(responseString, new TypeReference<List<StandardsSet>>(){});
@@ -233,7 +258,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             standardsList = mapper.readValue(responseString, new TypeReference<List<Standard>>(){});
@@ -278,7 +303,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             standardObject = mapper.readValue(responseString, new TypeReference<Standard>(){});
@@ -323,7 +348,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             standardsList = mapper.readValue(responseString, new TypeReference<List<Standard>>(){});
@@ -369,7 +394,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             standardsList = mapper.readValue(responseString, new TypeReference<List<Standard>>(){});
@@ -414,7 +439,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             conceptList = mapper.readValue(responseString, new TypeReference<List<Concept>>(){});
@@ -458,7 +483,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             conceptList = mapper.readValue(responseString, new TypeReference<List<Concept>>(){});
@@ -503,7 +528,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             ObjectMapper mapper = new ObjectMapper();
             conceptObj = mapper.readValue(responseString,  Concept.class);
@@ -555,7 +580,7 @@ public class EdGateClient
         if(entity != null) 
         {
             String responseString = EntityUtils.toString(entity);  
-            System.out.println(responseString);
+            //System.out.println(responseString);
             
             if(responseString.length() > 2)
             {
